@@ -1,22 +1,24 @@
-function minStack() {
-  this.stack = [];
-  this.minStack = [];
+function isValidSudoku(board) {
+  const rows = Array(9)
+    .fill()
+    .map(() => new Set());
+  const cols = Array(9)
+    .fill()
+    .map(() => new Set());
+  const boxes = Array(9)
+    .fill()
+    .map(() => new Set());
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const num = board[i][j];
+      if (num === ".") continue;
+      const boxIndex = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+      if (rows[i].has(num) || cols[j].has(num) || boxes[boxIndex].has(num))
+        return false;
+      rows[i].add(num);
+      cols[j].add(num);
+      boxes[boxIndex].add(num);
+    }
+  }
+  return true;
 }
-minStack.prototype.push = function (x) {
-  this.stack.push(x);
-  if (
-    this.minStack.length === 0 ||
-    x <= this.minStack[this.minStack.length - 1]
-  )
-    this.minStack.push(x);
-};
-minStack.prototype.pop = function () {
-  if (this.stack.pop() === this.minStack[this.minStack.length - 1])
-    this.minStack.pop();
-};
-minStack.prototype.top = function () {
-  return this.stack[this.stack.length - 1];
-};
-minStack.prototype.getMin = function () {
-  return this.minStack[this.minStack.length - 1];
-};
